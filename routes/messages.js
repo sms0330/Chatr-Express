@@ -6,6 +6,5 @@ router.get('/', index);
 router.post('/', create);
 router.patch('/:id', update);
 router.delete('/:id', destroy);
-router.post('/:id', changeFlag);
 
 module.exports = router;

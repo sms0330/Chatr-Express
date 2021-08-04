@@ -1,266 +1,290 @@
-// Write chatr code here!
+// // === FETCH API ===
 
-// === FECTH API ===
+// // Routes built in Chatr-Express
+// // GET /messages -> A JSON array of Messages
+// // POST /messages -> A confirmation (creates a message)
+// // PATCH /messages/:id -> A confirmation (edit a message)
+// // DELETE /messages/:id -> A confirmation (deletes a message)
 
-//Routes built into Chatr-Express
-//GET /messages -> A JSON array of Messages
-//POST /messages -> A confirmation (creates a message)
-//PATCH /messages/:id -> A confirmation (edit message)
-//DELETE /messages/:id -> A confirmation (deletes a message)
-
-//GET request
-//Calling "fetch" with URL as its only argument, it will make
-//a GET request to that URL.  It is asynchronous and returns a promise
-
+// // GET request:
+// // Calling "fetch" with a URL as its only argument, it will make
+// // a GET request to that URL. It is async and returns a promise.
 // fetch('http://localhost:3434/messages')
-//"fetch" returns an object that represents the HTTP response
-//use async method .text() or .json() on the response tp
-//parse its body.  Make sure to return it from the callback
-// .then(response => response.json())
+//   // "fetch" returns an object that represents the HTTP response.  
+//   // Use the async method .text() or .json() on the response to 
+//   // parse its body. Makse sure to return it from the callback.
+//   .then(response => response.json())
 
-//.then(data => console.table(data))
-//this is the same as below.  We can pass console.table as a callback
-//because how console.table is defined is it will log the argument
-//that is passed to it. If the data is specifically an array of objects,
-//we can use console.table to output it in a neat format
-// .then(console.table)
+//   // .then(data => console.table(data))
+//   // This is the same as above. We can pass console.table as a callback
+//   // because how console.table is defined is it will log the argument
+//   // that is passed to it. If the data is specifically an array of objects, 
+//   // we can use console.table to output it in a neat format
+//   .then(console.table)
 
-// //list of messages
-// const loadMessages = () => {
-//     fetch("/messages")
-//     .then(res => res.json ())
-//     .then(messages => {
-//         const messagesContainer = document.querySelector("#messages");
-//         let messagesHTML = "";
-//         messages.forEach(message => {
-//             messagesHTML += `
-//             <li>
-//                 ${message.body}
-//                 <i data-id=${message.id} class="delete-link">x</i>
-//             </li>
-//             `;
-//             messagesContainer.innerHTML = messagesHTML;
-//         })
-//     })
-// }
-
-// //write code to refresh list intermittently
-// const refreshIntervalmsg = 3000;
-// document.addEventListener("DOMContentLoaded", () => {
-//     loadMessages();
-//     setInterval(loadMessages, refreshIntervalmsg)
+// // POST request:
+// // To make a POST request, we add an options object as a second 
+// // argument to fetch().
+// fetch('http://localhost:3434/messages', {
+//   method: 'POST', // The HTTP verb
+//   headers: {
+//     // This HTTP header tells the server that we're sending 
+//     // JSON encoded data
+//     "Content-Type": "application/json",
+//   },
+//   // The body of the request. This is we put our data.
+//   // JSON.stringify converts a JS object to a JSON string. Our app
+//   // takes a message object with a "body" attribute to create in the database
+//   body: JSON.stringify({ body: "What's up?" }),
 // })
 
-// //POST AJAX req to create message
-// //req from Form
-// const fd = new FormData();
-// fd.set("body", "Hello, World!")
-// fetch("/messages",{
-//     method: "POST",
-//     body: fd
-// });
-
-// // fetch("/messages",{
-// //     method: "POST",
-// //     body: new FormData(document.querySelector("#form"))
-// // });
-
-// //Basic POST req with JSON
-// const headers = new Headers({
-//     Accept: "application/json, text/plain, */*",
-//     "Content-Type": "application/json"
-// });
-
-// fetch("/messages", {
-//     method: "POST",
-//     headers: headers,
-//     body: JSON.stringify({ body: "Hello, World!"})
-// })
-    
-// All our requests to messages
+// // All our requests to messages
 // const Message = {
-//     index() {
-//         return fetch('http://localhost:3434/messages')
-//         .then(response => response.json())
-//     },
-//     create(params){
-//         return fetch('/messages', { //we can omit the domain because '/' is on the same domain as the server
-//             method: 'POST',
-//             headers: {
-//                 "Content-Type": "application/json"
-//             },
-//             body: JSON.stringify(params),
-//             username: JSON.stringify(params)
-//         })
-//     },
-//     delete(id) {
-//         return fetch(`/messages/${id}`, {
-//             method: 'DELETE'
-//         })
-//     },
-//     changeFlag(id, flagged) {
-//         return fetch(`/messages/${id}`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-type': 'application/json'
-//             },
-//             body: JSON.stringify({
-//                 flagged: flagged 
-//             })
-//         })
-//     }
+//   // Example usage:
+//   // Message.index().then(console.log)
+//   index() {
+//     return fetch('http://localhost:3434/messages')
+//       .then(response => response.json())
+//   },
+//   create(params) {
+//     return fetch('/messages', { // we can omit the domain because "/" is on the same domain as the server
+//       method: 'POST', 
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(params),
+//     })
+//   },
+//   delete(id) {
+//     return fetch(`/messages/${id}`, {
+//       method: 'DELETE',
+//     })
+//   },
 // }
 
 // document.addEventListener('DOMContentLoaded', () => {
-//     const messagesUL = document.querySelector('#messages')
-//     const messageForm = document.querySelector('#new-message')
+//   const messagesUl = document.querySelector("#messages")
+//   const messageForm = document.querySelector('#new-message')
 
-//     const refreshMessages = () => {
-//         Message.index()
-//         .then(messages => {
-//             messagesUL.innerHTML = messages.map(message => {
-//                 return `
-//                     <li>
-//                     <strong>#${message.id}</strong>
-//                     ${message.body}</br>Posted by: ${message.username}
-//                     <button data-id=${message.id} class="delete-button">Delete</button>
-//                     <button data-id=${message.id} class="flag-button" onclick="${message.flagged}">${message.flagged ? "Unflag it" : "Flag it"}</button>
-//                     </li>
-//                     `;
-                
-//             })
-//             .join('')
-//         })
+//   const refreshMessages = () => {
+//     Message.index()
+//       .then(messages => {
+//         messagesUl.innerHTML = messages
+//           .map(message => {
+//             return `  
+//               <li>
+//                 <strong>#${message.id}</strong> ${message.body} <br>
+//                 <button
+//                   data-id="${message.id}"
+//                   class="delete-button"
+//                 >
+//                   Delete
+//                 </button>
+//               </li>
+//             `
+//           })
+//           .join('')
+//       })
+//   }
+//   setInterval(refreshMessages, 500)
+
+//   messageForm.addEventListener('submit', event => {
+//     event.preventDefault()
+
+//     const { currentTarget } = event // The form element
+
+//     // Use the FormData contructor to create a object representation
+//     // of the keys and values of the form that we pass as an argument
+//     // to the constructor
+//     const formData = new FormData(currentTarget)
+
+//     // formData.get() returns the value associated with a given key
+//     // from within a FormData object.
+//     Message.create({ body: formData.get("body")})
+//       .then(() => {
+//         console.log("Message created!")
+//         refreshMessages()
+//         currentTarget.reset() // resets (empties) the form inputs 
+//       })
+//   })
+
+//   messagesUl.addEventListener('click', event => {
+//     const { target } = event // element that triggered the event
+
+//     // Deletgate the event to the <ul> because only the list exists
+//     // when the DOM first loads. If the target we clicked on matches
+//     // the selector, we'll delete the message
+//     if (target.matches('.delete-button')) {
+//       // Use the "dataset" property to read data-* attributes
+//       Message.delete(target.dataset.id).then(() => {
+//         console.log("Message deleted!")
+//         refreshMessages()
+//       })
 //     }
-//     setInterval(refreshMessages, 3000)
-
-//     messageForm.addEventListener('submit', event => {
-//         event.preventDefault()
-
-//         const { currentTarget } = event //the form element
-
-//         //Use FormData constructor to create an object representation
-//         //of the keys and values of the form that we pass as an argument
-//         //to the constructor
-
-//         const formData = new FormData(currentTarget)
-
-//         //formData.get returns the value associated with the given key
-//         //from within the FormData object
-
-//         Message.create({ body: formData.get("body"), username: formData.get("username")})
-//             .then(() => {
-//                 console.log("Message created!")
-//                 refreshMessages()
-//                 currentTarget.reset() //resets (empties) the form inputs
-//             })
-//     })
-
-//     messagesUL.addEventListener('click', event => {
-//         const { target } = event //the element that triggered the event
-
-//         //Delegate the event to the unordered list <ul> because only the list exists
-//         //when the DOM first loads.  If the target we clicked matches the selector
-//         //we'll delete the message
-//         if (target.matches('.delete-button')) {
-//             Message.delete(target.dataset.id)
-//             .then(() => {
-//                 console.log("Message Deleted!")
-//                 refreshMessages()
-//             })
-//         }
-//         if (target.matches('.flag-button')) {
-//             Message.changeFlag(target.dataset.id)
-//             .then(() => {
-//                 console.log("Message Flagged!")
-//                 refreshMessages()
-//             })
-//         }
-//     })
+//   })
 // })
-fetch('/messages')
-    .then(response => response.json())
-    .then(data => {
-        let html = '';
-        for (const item of data) {
-            html += `<li style="background:${item.flagged ? "lightblue" : "lightpink"}"><span onclick="fillTheContent(this,${item.id},'${item.username}')">${item.body}</span> | posted by: ${item.username} | <button onclick="changeFlag(${item.id},${item.flagged})">${item.flagged ? "Unflag it" : "Flag it"}</button><button onclick="deleteMsg(${item.id})">Delete</button></li>`;
+
+// // === Chat-Battle Solutions ===
+
+// // Create a message
+// fetch('/messages', {
+//   method: 'POST',
+//   headers: {
+//       "Content-Type": "application/json",
+//     },
+//   body: JSON.stringify({ body: "hello world" })
+// })
+
+// // Count all messages
+// fetch('/messages')
+//   .then(res => res.json())
+//   .then(messages => console.log(messages.length))
+
+// // Edit someone else's message
+// fetch('/messages/18237', {
+//   method: 'PATCH',
+//   headers: {
+//       "Content-Type": "application/json",
+//     },
+//   body: JSON.stringify({ body: "something else" })
+// })
+
+// // Delete someone's message
+// fetch('/messages/18236', { method: 'DELETE' })
+
+// AJAX Helpers
+
+let filter = false;
+
+function deleteMessage(id) {
+  return fetch(`/messages/${id}`, {
+    method: 'DELETE'
+  });
+}
+
+function createMessage(message) {
+  return fetch(`/messages`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(message)
+  });
+}
+
+function updateMessage(message, id) {
+    return fetch(`/messages/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(message)
+    });
+  }
+
+function renderMessages(messages = []) {
+  return messages
+    .filter(message => !filter || message.flagged)
+    // sort by id, desc. to sort asc, m1.id - m2.id
+    .sort((m1, m2) => m2.id - m1.id)
+    .map(
+      message => `
+      <li class="${message.flagged ? "flagged" : ""}">
+        <p>
+          <strong>${message.id}</strong>
+          ${message.username} -
+          ${message.body}
+          <button data-id="${message.id}" data-flagged="${message.flagged}" class="flag-button" style="background:${message.flagged ? 'lightblue' : 'yellow'}">Flag</button>
+        </p>
+        <button data-id="${message.id}" class="delete-button">
+          Delete
+        </button>
+      </li>
+    `
+    )
+    .join('');
+}
+
+function refreshMessages(node) {
+  fetch('/messages')
+    .then(res => res.json())
+    .then(messages => {
+      node.innerHTML = renderMessages(messages);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const messagesUl = document.querySelector('#messages');
+  const newMessageForm = document.querySelector('#new-message');
+  const filterButton = document.querySelector('#filter-messages');
+
+  // Every second, re-render the messages inside
+  // of the ul#message node
+  setInterval(() => refreshMessages(messagesUl), 1000);
+
+  newMessageForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    createMessage({
+      username: formData.get('username'),
+      body: formData.get('body')
+    }).then(() => refreshMessages(messagesUl));
+  });
+
+  filterButton.addEventListener('click', event => {
+    event.preventDefault();
+    filter = !filter;
+    filterButton.innerHTML = `View ${filter ? "All" : "Flagged"} Messages`;
+    refreshMessages(messagesUl)
+  })
+
+  // The `.delete-button`s are not on the page initially
+  // or event after the dom content is loaded. Once they
+  // appear, they're constantly replaced every second.
+  // Yet we need to be able to listen to clicks on them.
+
+  // It would be an inefficient strategy to create the
+  // event listener on delete-button everytime they're
+  // re-created. It would take up a lot of memory.
+
+  // Instead, we'll listen for clicks on an ancestor
+  // that is on the page from the beginning and is
+  // never removed. When a one of its descendents is
+  // clicked, we'll check the target of the event.
+  // If the target is the `.delete-button`, we'll
+  // do something otherwise we'll do nothing.
+
+  // This is called event delegation.
+  messagesUl.addEventListener('click', event => {
+    const { target } = event;
+    const flagButton = target.closest('.flag-button')
+
+    if (target.matches('.delete-button')) {
+      event.preventDefault();
+      const messageId = target.getAttribute('data-id');
+      deleteMessage(messageId).then(() => {
+        refreshMessages(messagesUl);
+      });
+    }
+
+
+    if (flagButton) {
+        const messageId = target.getAttribute('data-id')
+        let messageFlagged = target.getAttribute('data-flagged');
+        
+        if (messageFlagged === 'false'){
+            event.preventDefault();
+            updateMessage({ "flagged": true }, messageId).then(() => {
+            refreshMessages(messagesUl);
+            });
+        } else {
+            event.preventDefault();
+            updateMessage({ "flagged": false }, messageId).then(() => {
+            refreshMessages(messagesUl);
+            });
         }
-        document.querySelector("#messages").innerHTML = html;
-    })
+    }
 
-function changeFlag(id, flagged) {
-    event.preventDefault;
-    fetch(`/messages/${id}`, {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify({
-            flagged: flagged
-        })
-    }).then(response => location.reload());
-}
-
-function filteringByFlag() {
-    // console.log(1111)
-    event.preventDefault;
-    fetch(`/messages?flagged=true`)
-        .then(response => response.json())
-        .then(data => {
-            let html = '';
-            for (const item of data) {
-                html += `<li style="background:${item.flagged ? "lightblue" : "lightpink"}"><span onclick="fillTheContent(${item.id},${item.username})">${item.body}</span> | posted by: ${item.username} | <button onclick="changeFlag(${item.id},${item.flagged})">${item.flagged ? "Unflag it" : "Flag it"}</button><button onclick="deleteMsg(${item.id})">Delete</button></li>`;
-            }
-            document.querySelector("#messages").innerHTML = html;
-        });
-}
-
-function fillTheContent(event, id, username) {
-    document.querySelector("#body").value = event.innerText;
-    document.querySelector("#username").value = username ? username : '';
-    document.querySelector("#userid").innerText = "UserId: " + id;
-    // document.querySelector("#new-message").removeEventListener('submit', updateMSG);
-    // document.querySelector("#new-message").removeEventListener('submit', createMSG);
-    document.querySelector("#new-message").onsubmit = null;
-    document.querySelector("#new-message").addEventListener('submit', updateMSG);
-}
-
-function updateMSG() {
-    fetch(`/messages/${document.querySelector("#userid").innerText}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify({
-            username: document.querySelector("#username").value,
-            body: document.querySelector("#body").value
-        })
-    }).then(response => location.reload());
-}
-
-function createMSG() {
-    fetch(`/messages/`, {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify({
-            username: document.querySelector("#username").value,
-            flagged: false,
-            body: document.querySelector("#body").value
-        })
-    }).then(response => location.reload());
-}
-window.onload = function () {
-    document.querySelector("#new-message").addEventListener('submit', createMSG);
-}
-
-function deleteMsg(id) {
-    event.preventDefault;
-    fetch(`/messages/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-type': 'application/json'
-        },
-    }).then(response => location.reload());
-}
+  });
+});

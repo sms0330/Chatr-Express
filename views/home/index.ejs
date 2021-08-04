@@ -3,14 +3,12 @@
 <h1>Chatr</h1>
 
 <form id="new-message">
-  <textarea name="body" id="body" placeholder="Type your message..."></textarea>
-  <label for="name">Name</label>
-  <input type="text" name="username" id="username"></input>
+  <input type="text" name="username" placeholder="Username">
+  <textarea name="body" placeholder="Type your message..."></textarea>
   <input type="submit" value='Post Message' />
 </form>
+<button id="filter-messages" type="button" name="button">View Flagged Messages</button>
 
-<br>
-<button onclick="filteringByFlag()">Sort</button>
 <ul id="messages"></ul>
 
 <%- include('../partials/footer') %>
